@@ -6,7 +6,7 @@
 /*   By: segarcia <segarcia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 04:28:47 by segarcia          #+#    #+#             */
-/*   Updated: 2023/01/11 06:22:47 by segarcia         ###   ########.fr       */
+/*   Updated: 2023/01/11 06:42:01 by segarcia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,25 @@ void ft_printf_num(long long int num, int base, int *len)
 	if (num < 0)
 	{
 		num *= -1;
-		*len = write(1, "-", 1);
+		*len += write(1, "-", 1);
 	}
 	if (num >= base)
 		ft_printf_num((num / base), base, len);
-	*len = write(1, &hexadecimal[num % base], 1);
+	*len += write(1, &hexadecimal[num % base], 1);
+}
+
+void ft_printf_hexA(long long int num, int base, int *len)
+{
+	char	*hexadecimal = "0123456789ABCDEF";
+
+	if (num < 0)
+	{
+		num *= -1;
+		*len += write(1, "-", 1);
+	}
+	if (num >= base)
+		ft_printf_num((num / base), base, len);
+	*len += write(1, &hexadecimal[num % base], 1);
 }
 
 int ft_printf(const char *str, ...)
@@ -74,6 +88,10 @@ int ft_printf(const char *str, ...)
 				ft_printf_num((long long int)va_arg(arg, int), 10, &print_len);
 			if (str[i + 1] == 'x')
 				ft_printf_num((long long int)va_arg(arg, int), 16, &print_len);
+			if (str[i + 1] == 'X')
+				ft_printf_hexA((long long int)va_arg(arg, int), 16, &print_len);
+			if (str[i + 1] == '%')
+				print_len += ft_printf_char('%');
 			i++;
 		}
 		else
@@ -86,9 +104,12 @@ int ft_printf(const char *str, ...)
 
 int main()
 {
-	ft_printf("%c\n", 'a');
-	ft_printf("%s\n", "toto");
-	ft_printf("Magic %s is %d\n", "number", 42);
-	ft_printf("Hexadecimal for %d is %x\n", 42, 42);
+	ft_printf(" - Len: %i\n", ft_printf("%c", 'a'));
+	ft_printf(" - Len: %i\n", ft_printf("%s", "toto"));
+	ft_printf(" - Len: %i\n",ft_printf("%%"));
+	ft_printf(" - Len: %i\n", ft_printf("Magic %s is %d", "number", 42));
+	ft_printf(" - Len: %i\n", ft_printf("Hexadecimal for %d is %x", 42, 42));
+	ft_printf(" - Len: %i\n", ft_printf("Hexadecimal for %d is %X\n", 42, 42));
+	ft_printf(" - Len: %i\n", printf("Hexadecimal for %d is %X\n", 42, 42));
 	return (1);
 }
