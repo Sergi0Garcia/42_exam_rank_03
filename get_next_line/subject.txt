@@ -2,10 +2,8 @@ Assignment name : get_next_line
 Expected files : get_next_line.c get_next_line.h
 Allowed functions: read, free, malloc
 
-
 Write a function named get_next_line which prototype should be:
 char *get_next_line(int fd);
-
 
 Your function must return a line that has been read from the file descriptor passed as parameter. What we call a "line that has been read" is a succesion of 0 to n characters that end with '\n' (ascii code 0x0a) or with End Of File (EOF).
 
